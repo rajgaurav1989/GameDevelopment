@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
@@ -68,6 +69,12 @@ public class RotationWithMouse extends Application {
                     break;
                 case R:
                     rootGroup.reset();
+                    break;
+                case Z:
+                    rootGroup.rotateByZ(10);
+                    break;
+                case X:
+                    rootGroup.rotateByZ(-10);
             }
         });
 
@@ -101,17 +108,22 @@ public class RotationWithMouse extends Application {
             angleY.set(angleAnchorY + (anchorX - event.getSceneX()));
         });
 
+        scene.addEventHandler(ScrollEvent.SCROLL, event -> {
+            double deltaY = event.getDeltaY();
+            rootGroup.translateZProperty().set(rootGroup.getTranslateZ() + deltaY);
+        });
+
     }
 
     class SmartGroup extends Group {
         Transform groupTransform = new Rotate();
 
-        void rotateByX(int ang) {
-            angleX.set(angleX.get() + ang);
+        void rotateByX(int angle) {
+            angleX.set(angleX.get() + angle);
         }
 
-        void rotateByY(int ang) {
-            angleY.set(angleY.get() + ang);
+        void rotateByY(int angle) {
+            angleY.set(angleY.get() + angle);
         }
 
         void reset() {
@@ -119,6 +131,11 @@ public class RotationWithMouse extends Application {
             angleY.set(0);
         }
 
+        public void rotateByZ(int angle) {
+            Rotate rotate = new Rotate(angle, new Point3D(0, 0, 1));
+            groupTransform = groupTransform.createConcatenation(rotate);
+            this.getTransforms().addAll(groupTransform);
+        }
     }
 
     public static void main(String[] args) {
