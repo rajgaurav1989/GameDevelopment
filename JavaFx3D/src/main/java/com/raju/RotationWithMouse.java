@@ -9,6 +9,7 @@ import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
@@ -18,6 +19,10 @@ import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class RotationWithMouse extends Application {
     public static final int Z_MOVEMENT = 100;
@@ -84,8 +89,11 @@ public class RotationWithMouse extends Application {
         primaryStage.show();
     }
 
-    private Box getBox() {
-        PhongMaterial material = new PhongMaterial(Color.AZURE);
+    private Box getBox() throws FileNotFoundException {
+        PhongMaterial material = new PhongMaterial();
+        File file = new File("src/resources/wood.jpg");
+        Image image = new Image(new FileInputStream(file));
+        material.setDiffuseMap(image);
         Box box = new Box(100, 20, 50);
         box.setMaterial(material);
         return box;
