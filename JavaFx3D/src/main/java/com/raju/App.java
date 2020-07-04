@@ -23,24 +23,24 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Sphere sphere = new Sphere(RADIUS);
-        Group rootGroup = new Group() ;
+        Group rootGroup = new Group();
         rootGroup.getChildren().add(sphere);
 
-        Camera camera = new PerspectiveCamera() ;
+        Camera camera = new PerspectiveCamera();
         Scene scene = new Scene(rootGroup, WIDTH, HEIGHT);
         scene.setFill(Color.SNOW);
         scene.setCamera(camera);
 
-        sphere.translateXProperty().set(WIDTH/2.0);
-        sphere.translateYProperty().set(HEIGHT/2.0);
+        sphere.translateXProperty().set(WIDTH / 2.0);
+        sphere.translateYProperty().set(HEIGHT / 2.0);
 
-        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED , event -> {
+        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case UP:
-                    sphere.translateZProperty().set(sphere.getTranslateZ()+Z_MOVEMENT);
+                    sphere.translateZProperty().set(sphere.getTranslateZ() + Z_MOVEMENT);
                     break;
                 case DOWN:
-                    sphere.translateZProperty().set(sphere.getTranslateZ()-Z_MOVEMENT);
+                    sphere.translateZProperty().set(sphere.getTranslateZ() - Z_MOVEMENT);
             }
         });
 
