@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
@@ -32,7 +33,7 @@ public class RotationWithMouse extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Box box = new Box(100, 20, 50);
+        Box box = getBox();
         SmartGroup rootGroup = new SmartGroup();
         rootGroup.getChildren().add(box);
 
@@ -71,16 +72,23 @@ public class RotationWithMouse extends Application {
                     rootGroup.reset();
                     break;
                 case Z:
-                    rootGroup.rotateByZ(10);
+                    rootGroup.rotateByZ(5);
                     break;
                 case X:
-                    rootGroup.rotateByZ(-10);
+                    rootGroup.rotateByZ(-5);
             }
         });
 
         primaryStage.setTitle("Raj Gaurav 3D Box Rotation By Mouse");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private Box getBox() {
+        PhongMaterial material = new PhongMaterial(Color.AZURE);
+        Box box = new Box(100, 20, 50);
+        box.setMaterial(material);
+        return box;
     }
 
     private void initMouseControl(SmartGroup rootGroup, Scene scene) {
@@ -115,8 +123,11 @@ public class RotationWithMouse extends Application {
 
     }
 
+
     class SmartGroup extends Group {
         Transform groupTransform = new Rotate();
+
+        int angleZ = 0;
 
         void rotateByX(int angle) {
             angleX.set(angleX.get() + angle);
@@ -129,10 +140,19 @@ public class RotationWithMouse extends Application {
         void reset() {
             angleX.set(0);
             angleY.set(0);
+            if (this.getTransforms().size() == 3)
+                this.getTransforms().remove(this.getTransforms().size() - 1);
+            Rotate rotate = new Rotate(-angleZ, new Point3D(0, 0, 1));
+            groupTransform = groupTransform.createConcatenation(rotate);
+            this.getTransforms().addAll(groupTransform);
+            angleZ = 0;
         }
 
         public void rotateByZ(int angle) {
             Rotate rotate = new Rotate(angle, new Point3D(0, 0, 1));
+            angleZ += angle;
+            if (this.getTransforms().size() == 3)
+                this.getTransforms().remove(this.getTransforms().size() - 1);
             groupTransform = groupTransform.createConcatenation(rotate);
             this.getTransforms().addAll(groupTransform);
         }
