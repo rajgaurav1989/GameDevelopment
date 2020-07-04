@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 
-public class App extends Application {
+public class Chapter1 extends Application {
     public static final int Z_MOVEMENT = 100;
     private static final int RADIUS = 50;
     public static final int WIDTH = 1400;
@@ -44,7 +44,7 @@ public class App extends Application {
             }
         });
 
-        primaryStage.setTitle("Raj Gaurav 3D Spher with help of Genuine code");
+        primaryStage.setTitle("Raj Gaurav 3D Sphere with help of Genuine code");
         primaryStage.setScene(scene);
         primaryStage.show();
 
