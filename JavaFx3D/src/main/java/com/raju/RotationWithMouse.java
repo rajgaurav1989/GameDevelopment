@@ -1,14 +1,12 @@
 package com.raju;
 
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point3D;
-import javafx.scene.Camera;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
@@ -18,6 +16,7 @@ import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -36,11 +35,14 @@ public class RotationWithMouse extends Application {
     private final DoubleProperty angleX = new SimpleDoubleProperty(0);
     private final DoubleProperty angleY = new SimpleDoubleProperty(0);
 
+    private final LightBase lightBase = new PointLight();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Box box = getBox();
         SmartGroup rootGroup = new SmartGroup();
         rootGroup.getChildren().add(box);
+        rootGroup.getChildren().addAll(prepareLightSource());
 
         Camera camera = new PerspectiveCamera();
         Scene scene = new Scene(rootGroup, WIDTH, HEIGHT);
@@ -87,6 +89,27 @@ public class RotationWithMouse extends Application {
         primaryStage.setTitle("Raj Gaurav 3D Box Rotation By Mouse");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                lightBase.setRotate(lightBase.getRotate() + 1);
+            }
+        };
+        timer.start();
+    }
+
+    private Node[] prepareLightSource() {
+        lightBase.setColor(Color.RED);
+        lightBase.getTransforms().add(new Translate(0, -50, 100));
+        lightBase.setRotationAxis(Rotate.X_AXIS);
+
+        Sphere sphere = new Sphere(2);
+        sphere.getTransforms().addAll(lightBase.getTransforms());
+        sphere.rotateProperty().bind(lightBase.rotateProperty());
+        sphere.rotationAxisProperty().bind(lightBase.rotationAxisProperty());
+
+        return new Node[]{lightBase, sphere};
     }
 
     private Box getBox() throws FileNotFoundException {
