@@ -6,6 +6,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point3D;
 import javafx.scene.*;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
@@ -44,9 +45,13 @@ public class EarthRotation extends Application {
         SmartGroup world = new SmartGroup();
         world.getChildren().add(prepareEarth());
 
+        Slider slider = prepareSlider();
+        world.translateZProperty().bind(slider.valueProperty());
+
         Group root = new Group();
         root.getChildren().add(world);
         root.getChildren().add(prepareImageView());
+        root.getChildren().add(slider);
 
         Scene scene = new Scene(root, WIDTH, HEIGHT, true);
         scene.setFill(Color.SNOW);
@@ -113,6 +118,19 @@ public class EarthRotation extends Application {
         return imageView;
     }
 
+
+    private Slider prepareSlider(){
+        Slider slider = new Slider();
+        slider.setMax(800);
+        slider.setMin(-400);
+        slider.setPrefWidth(300d);
+        slider.setLayoutX(-150);
+        slider.setLayoutY(200);
+        slider.setShowTickLabels(true);
+        slider.setTranslateZ(5);
+        slider.setStyle("-fx-base: black");
+        return slider;
+    }
 
     private Node prepareEarth() throws FileNotFoundException {
         PhongMaterial earthMaterial = new PhongMaterial();
