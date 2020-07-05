@@ -91,9 +91,11 @@ public class RotationWithMouse extends Application {
 
     private Box getBox() throws FileNotFoundException {
         PhongMaterial material = new PhongMaterial();
-        File file = new File("src/resources/wood.jpg");
-        Image image = new Image(new FileInputStream(file));
+        File textureFile = new File("src/resources/wood.jpg");
+        File specularFile = new File("src/resources/illuminati2.jpg");
+        Image image = new Image(new FileInputStream(textureFile));
         material.setDiffuseMap(image);
+        material.setSpecularMap(new Image(new FileInputStream(specularFile)));
         Box box = new Box(100, 20, 50);
         box.setMaterial(material);
         return box;
