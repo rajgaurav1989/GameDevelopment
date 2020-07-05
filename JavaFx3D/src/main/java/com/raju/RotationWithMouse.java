@@ -39,13 +39,16 @@ public class RotationWithMouse extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Box box = getBox();
+        Box box1 = getBox(100, 20, 50);
+        Box box2 = getBox(20, 100, 100);
         SmartGroup rootGroup = new SmartGroup();
-        rootGroup.getChildren().add(box);
+        rootGroup.getChildren().add(box1);
+        rootGroup.getChildren().add(box2);
         rootGroup.getChildren().addAll(prepareLightSource());
+        rootGroup.getChildren().add(new AmbientLight());
 
         Camera camera = new PerspectiveCamera();
-        Scene scene = new Scene(rootGroup, WIDTH, HEIGHT);
+        Scene scene = new Scene(rootGroup, WIDTH, HEIGHT, true);
         scene.setFill(Color.SNOW);
         scene.setCamera(camera);
 
@@ -112,14 +115,14 @@ public class RotationWithMouse extends Application {
         return new Node[]{lightBase, sphere};
     }
 
-    private Box getBox() throws FileNotFoundException {
+    private Box getBox(double width, double height, double depth) throws FileNotFoundException {
         PhongMaterial material = new PhongMaterial();
         File textureFile = new File("src/resources/wood.jpg");
-        File specularFile = new File("src/resources/illuminati2.jpg");
+        //File specularFile = new File("src/resources/illuminati2.jpg");
         Image image = new Image(new FileInputStream(textureFile));
         material.setDiffuseMap(image);
-        material.setSpecularMap(new Image(new FileInputStream(specularFile)));
-        Box box = new Box(100, 20, 50);
+        //material.setSelfIlluminationMap(new Image(new FileInputStream(specularFile)));
+        Box box = new Box(width, height, depth);
         box.setMaterial(material);
         return box;
     }
